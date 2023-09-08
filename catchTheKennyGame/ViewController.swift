@@ -8,11 +8,12 @@
 import UIKit
 
 class ViewController: UIViewController {
-    
+    //Varibles
     var score = 0
+    var timer = Timer()
+    var counter = 0
     
-    
-    
+    //Views
     @IBOutlet weak var timeLabel: UILabel!
     @IBOutlet weak var scoreLabel: UILabel!
     @IBOutlet weak var highScoreLabel: UILabel!
@@ -30,8 +31,12 @@ class ViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
         scoreLabel.text = "Score:\(score)"
         
+        
+        
+        //Images
         keny1.isUserInteractionEnabled = true
         keny2.isUserInteractionEnabled = true
         keny3.isUserInteractionEnabled = true
@@ -63,7 +68,35 @@ class ViewController: UIViewController {
         keny8.addGestureRecognizer(recognizer8)
         keny9.addGestureRecognizer(recognizer9)
         
+        
+        //Timers
+        counter = 10
+        timeLabel.text = "\(counter)"
+        timer = Timer.scheduledTimer(timeInterval: 1, target: self, selector: #selector(countDown), userInfo: nil, repeats: true)
     }
+    
+    @objc func countDown() {
+        counter -= 1
+        timeLabel.text = String(counter)
+        if counter == 0 {
+            timer.invalidate()
+            
+            //Alerts
+            
+            let alert = UIAlertController(title: "Time's up", message: "do u want play again", preferredStyle: UIAlertController.Style.alert)
+            let okButton = UIAlertAction(title: "OK", style: UIAlertAction.Style.cancel)
+            let replayButton = UIAlertAction(title: "Replay", style: UIAlertAction.Style.default)
+            
+            alert.addAction(okButton)
+            alert.addAction(replayButton)
+            self.present(alert, animated: true)
+            
+        }
+    }
+    
+    
+    
+    
     @objc func inccreasScore() {
         score += 1
         scoreLabel.text = "Score:\(score)"
