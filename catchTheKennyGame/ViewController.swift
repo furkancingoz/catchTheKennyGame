@@ -12,6 +12,9 @@ class ViewController: UIViewController {
     var score = 0
     var timer = Timer()
     var counter = 0
+    var kenyArray = [UIImageView]()
+    var hideTimer = Timer()
+    
     
     //Views
     @IBOutlet weak var timeLabel: UILabel!
@@ -69,18 +72,39 @@ class ViewController: UIViewController {
         keny9.addGestureRecognizer(recognizer9)
         
         
+        kenyArray = [keny1,keny2,keny3,keny4,keny5,keny6,keny7,keny8,keny9]
+        
         //Timers
         counter = 10
         timeLabel.text = "\(counter)"
         timer = Timer.scheduledTimer(timeInterval: 1, target: self, selector: #selector(countDown), userInfo: nil, repeats: true)
+        hideTimer = Timer.scheduledTimer(timeInterval: 0.5, target: self, selector: #selector(hideKeny), userInfo: nil, repeats: true)
+        
+        hideKeny()
     }
+    
+    
+  @objc  func hideKeny() {
+        
+        for kenny in kenyArray {
+            kenny.isHidden = true
+        }
+        
+        let random = Int(arc4random_uniform(UInt32(kenyArray.count-1)))
+        kenyArray[random].isHidden = false
+    }
+    
+    
     
     @objc func countDown() {
         counter -= 1
         timeLabel.text = String(counter)
         if counter == 0 {
             timer.invalidate()
-            
+            hideTimer.invalidate()
+            for kenny in kenyArray {
+                kenny.isHidden = true
+            }
             //Alerts
             
             let alert = UIAlertController(title: "Time's up", message: "do u want play again", preferredStyle: UIAlertController.Style.alert)
